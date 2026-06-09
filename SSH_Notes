@@ -1,0 +1,74 @@
+🧑‍💻 SSH (Secure Shell) – Interview Cheat Sheet
+🔑 1. What is SSH?
+SSH (Secure Shell) is a protocol used to securely access and manage remote servers over a network.
+Key idea:
+Secure remote login
+Encrypted communication
+Replaces insecure tools like Telnet
+🔐 2. SSH Authentication Types
+1. Password-based
+Login using username + password (less secure)
+2. Key-based (Recommended)
+Uses cryptographic key pair instead of password
+🔑 3. SSH Key Pair Concept
+Private Key → kept on client machine (secret)
+Public Key → stored on server
+How it works:
+Server stores public key
+Client proves identity using private key
+Server verifies match → grants access
+📁 4. Important File (Server Side)
+~/.ssh/authorized_keys
+Explanation:
+Stores all allowed public keys
+Each line = one authorized device/user
+🔐 5. SSH Directory Permissions
+chmod 700 ~/.ssh
+Only owner can access .ssh directory
+chmod 600 ~/.ssh/authorized_keys
+Only owner can read/write authorized_keys file
+➕ 6. Add SSH Public Key
+Method 1 (recommended)
+echo "ssh-ed25519 AAAA... user@device" >> ~/.ssh/authorized_keys
+Method 2 (manual input)
+cat >> ~/.ssh/authorized_keys
+
+Then:
+
+Paste key → CTRL + D to save
+👀 7. View Stored Keys
+cat ~/.ssh/authorized_keys
+Displays all authorized public keys
+🔢 8. View Keys with Line Numbers
+nl ~/.ssh/authorized_keys
+Helps identify each key separately
+🕒 9. View Recently Added Keys
+tail ~/.ssh/authorized_keys
+Shows latest added SSH keys
+🔄 10. SSH Login Flow (VERY IMPORTANT)
+1. Client connects to server
+2. Server checks authorized_keys
+3. Server sends challenge
+4. Client signs challenge using private key
+5. Server verifies signature
+6. Access granted if valid
+⚠️ 11. Common Mistakes
+- Wrong file permissions → SSH fails
+- Public key not added correctly
+- Multiple keys in one line (invalid)
+- Using private key on server (wrong)
+🔐 12. Why SSH is Secure
+- Uses encryption (RSA / Ed25519)
+- Private key never leaves client machine
+- Prevents password-based attacks
+🧪 13. Useful Linux Commands
+whoami   # current user
+id       # user + groups
+sudo -l  # check sudo permissions
+💡 14. Real-World Usage
+- Remote server management (AWS, Azure, GCP)
+- Git authentication (GitHub, GitLab)
+- DevOps deployments
+- Kubernetes / Docker access
+🧠 15. One-Line Interview Answer
+SSH is a secure protocol that uses public-private key cryptography to authenticate users and enable encrypted remote server access without passwords.
