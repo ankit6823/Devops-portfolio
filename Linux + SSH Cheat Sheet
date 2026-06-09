@@ -4,74 +4,89 @@ uname -a              → Kernel & system info
 cat /etc/os-release   → OS details
 whoami                → current user
 id                    → user + groups
+
 📂 FILE & DIRECTORY
+
 ls -la        → list all files
 pwd           → current directory
 cd /path      → change directory
 mkdir folder  → create folder
 rm file       → delete file
 rm -rf folder → force delete folder
+
 📄 FILE VIEWING (LOGS IMPORTANT)
 cat file        → show full file
 less file       → scroll file
 head file       → first lines
 tail file       → last lines
 tail -f file    → live logs (VERY IMPORTANT)
+
 ⚙️ PROCESS MANAGEMENT
 ps aux        → all processes
 top           → live system usage
 htop          → better view (if installed)
 kill -9 PID   → force kill process
+
 🌐 NETWORKING
 ping google.com     → check connectivity
 curl URL            → fetch request
 wget URL            → download file
 ss -tulnp           → open ports
 lsof -i :8080       → check port usage
+
 📦 PACKAGE MANAGEMENT (Ubuntu)
 sudo apt update
 sudo apt install package
 sudo apt remove package
+
 🔐 SSH (VERY IMPORTANT)
 ssh user@ip
 ssh -i key.pem user@ip
 ssh-keygen -t ed25519
 ssh-copy-id user@ip
+
 🔐 SSH FILE LOCATIONS
 ~/.ssh/id_rsa              → private key
 ~/.ssh/id_rsa.pub          → public key
 ~/.ssh/authorized_keys     → server allowed keys
+
 🔐 PERMISSIONS
 chmod 777 file   → full access (danger)
 chmod 755 file   → standard apps
 chmod 700 file   → owner only
 chmod 600 file   → secure file
 chown user:group file → change owner
+
 💾 DISK & MEMORY
 df -h       → disk usage
 du -sh dir  → folder size
 free -m     → RAM usage
+
 📜 LOGS
 tail -f /var/log/syslog   → live logs
 journalctl -u service     → service logs
 dmesg | tail              → system logs
+
 ⚙️ SERVICES (systemctl)
 systemctl status nginx
 systemctl start nginx
 systemctl stop nginx
 systemctl restart nginx
+
 🐳 DOCKER (DEVOPS CORE)
 docker ps
 docker images
 docker run -it ubuntu
 docker exec -it container bash
 docker logs container_id
+
 🧪 DEBUG FLOW (REAL DEVOPS)
 1. Check logs
 2. Check processes
 3. Check ports
 4. Check disk
 5. Check services
+
 🔥 MOST IMPORTANT COMMANDS (INTERVIEW)
 whoami
 id
