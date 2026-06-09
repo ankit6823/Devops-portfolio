@@ -1,0 +1,378 @@
+# SSH Public Key Authentication – Learning Notes
+
+## Goal
+
+Allow users or devices to connect to a Linux server without entering a password by using SSH key pairs.
+
+---
+
+## SSH Key Pair Basics
+
+An SSH key pair consists of:
+
+### Public Key
+
+* Safe to share.
+* Stored on the server.
+* Added to:
+
+```text
+~/.ssh/authorized_keys
+```
+
+### Private Key
+
+* Must be kept secret.
+* Stored on the user's computer.
+* Used by PuTTY, MobaXterm, OpenSSH, etc.
+
+Authentication works because the server verifies that the client owns the matching private key.
+
+---
+
+## What We Found
+
+The `.ssh` directory already existed:
+
+```bash
+ls -la ~/.ssh
+```
+
+Output:
+
+```text
+drwx------ 2 finesse finesse 4096 Jun 9 08:45 .
+drwxr-x--- 4 finesse finesse 4096 Jun 9 08:45 ..
+```
+
+This means:
+
+* `.ssh` folder exists.
+* Permissions are correct.
+* `authorized_keys` file did not exist yet.
+
+---
+
+## Creating authorized_keys
+
+Create the file:
+
+```bash
+touch ~/.ssh/authorized_keys
+```
+
+Set proper permissions:
+
+```bash
+chmod 600 ~/.ssh/authorized_keys
+```
+
+Verify:
+
+```bash
+ls -la ~/.ssh
+```
+
+Expected output:
+
+```text
+-rw------- 1 finesse finesse 0 Jun 9 08:50 authorized_keys
+```
+
+---
+
+## Adding a Public Key
+
+Add a public key:
+
+```text
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAA.... user@laptop
+```
+
+into:
+
+```text
+~/.ssh/authorized_keys
+```
+
+Each key must be on its own line.
+
+Example:
+
+```text
+ssh-ed25519 AAAA... laptop
+ssh-rsa AAAA... desktop
+ssh-ed25519 AAAA... mobaxterm
+```
+
+---
+
+## Multiple Users or Devices
+
+You can authorize multiple devices by adding multiple public keys.
+
+Example:
+
+```text
+ssh-ed25519 AAAA... laptop
+ssh-ed25519 BBBB... office-pc
+ssh-rsa CCCC... mobaxterm
+```
+
+Anyone possessing the matching private key can log in.
+
+---
+
+## PuTTY Workflow
+
+### Generate Keys
+
+1. Open PuTTYgen.
+2. Click Generate.
+3. Save private key (.ppk).
+4. Copy public key.
+
+### Server Side
+
+Paste public key into:
+
+```text
+~/.ssh/authorized_keys
+```
+
+### Connect
+
+In PuTTY:
+
+Connection → SSH → Auth → Credentials
+
+Select:
+
+```text
+private_key.ppk
+```
+
+Then connect.
+
+---
+
+## MobaXterm Workflow
+
+### Generate Keys
+
+Tools → MobaKeyGen
+
+Generate:
+
+* RSA
+  or
+* Ed25519
+
+Save private key.
+
+Copy public key.
+
+### Server Side
+
+Paste public key into:
+
+```text
+~/.ssh/authorized_keys
+```
+
+### Connect
+
+Session → SSH
+
+Specify:
+
+* Hostname/IP
+* Username
+* Private key file
+
+Connect.
+
+---
+
+## Important Permissions
+
+SSH is strict about permissions.
+
+Recommended:
+
+```bash
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+```
+
+Meaning:
+
+### 700
+
+Owner:
+
+```text
+Read + Write + Execute
+```
+
+Others:
+
+```text
+No access
+```
+
+### 600
+
+Owner:
+
+```text
+Read + Write
+```
+
+Others:
+
+```text
+No access
+```
+
+---
+
+## Why vim Did Not Work
+
+Command:
+
+```bash
+vim ~/.ssh/authorized_keys
+```
+
+Error:
+
+```text
+vim: command not found
+```
+
+Reason:
+
+* vim is not installed.
+
+Possible alternatives:
+
+```bash
+nano ~/.ssh/authorized_keys
+```
+
+or
+
+```bash
+cat > ~/.ssh/authorized_keys
+```
+
+Paste key and press:
+
+```text
+Ctrl + D
+```
+
+to save.
+
+---
+
+## Why sudo Did Not Work
+
+Command:
+
+```bash
+sudo apt install
+```
+
+Error:
+
+```text
+sudo: command not found
+```
+
+Reason:
+
+* sudo package is not installed.
+* You may be inside a minimal container.
+
+Check:
+
+```bash
+whoami
+```
+
+If output is:
+
+```text
+root
+```
+
+Use:
+
+```bash
+apt update
+apt install vim
+```
+
+without sudo.
+
+---
+
+## Important Security Rules
+
+DO:
+
+* Share only public keys.
+* Keep private keys secret.
+* Use strong passphrases.
+* Store multiple public keys in authorized_keys.
+
+DO NOT:
+
+* Share private keys.
+* Email private keys.
+* Commit private keys to Git repositories.
+* Put multiple keys on the same line.
+
+---
+
+## Quick Commands Reference
+
+Create SSH folder:
+
+```bash
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
+```
+
+Create authorized_keys:
+
+```bash
+touch ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+```
+
+View keys:
+
+```bash
+cat ~/.ssh/authorized_keys
+```
+
+Add another key:
+
+```bash
+echo "PUBLIC_KEY_HERE" >> ~/.ssh/authorized_keys
+```
+
+Check current user:
+
+```bash
+whoami
+```
+
+Check SSH folder:
+
+```bash
+ls -la ~/.ssh
+```
